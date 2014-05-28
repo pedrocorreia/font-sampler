@@ -1,0 +1,33 @@
+{
+    "chars": [
+        "triangle-up",
+        "triangle-right",
+        "triangle-down",
+        "triangle-left",
+        "arrow-up",
+        "arrow-right",
+        "arrow-down",
+        "arrow-left",
+        "chevron-up",
+        "chevron-right",
+        "chevron-down",
+        "chevron-left",
+        "square",
+        "square-minus",
+        "square-plus",
+        "stroke-square",
+        "stroke-minus",
+        "stroke-plus",
+        "circle-chevron-up",
+        "circle-chevron-right",
+        "circle-chevron-down",
+        "circle-chevron-left",
+        "circle-h-chevron-up",
+        "circle-h-chevron-right",
+        "circle-h-chevron-down",
+        "circle-h-chevron-left",
+        "reorder",
+        "ul",
+        "sapo"
+    ]
+}
