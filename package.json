@@ -1,7 +1,7 @@
 {
   "name": "grunt-font-sampler",
   "description": "The best Grunt plugin ever.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "homepage": "https://github.com/pedrocorreia/font-sampler",
   "author": {
     "name": "Pedro Correia",
