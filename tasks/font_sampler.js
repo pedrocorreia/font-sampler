@@ -8,6 +8,8 @@
 
 'use strict';
 
+var chalk = require('chalk');
+
 module.exports = function(grunt) {
 
   // Please see the Grunt documentation for more information regarding task
@@ -29,14 +31,14 @@ module.exports = function(grunt) {
     var sampler = grunt.file.read('doc-head.html');
 
     options.stylesheets.forEach(function(css){
-        sampler += '<link rel="stylesheet" type="text/css" href="'+css+'">\n'
+        sampler += '<link rel="stylesheet" type="text/css" href="'+css+'">\n';
     });
 
     // create sizes css
     sampler += '<style>\n';
 
     options.sizes.forEach(function(size){
-        sampler += '.p'+size+' { font-size: '+size+'px !important; } \n'
+        sampler += '.p'+size+' { font-size: '+size+'px !important; } \n';
     });
 
     sampler += '</style>\n';
@@ -47,7 +49,7 @@ module.exports = function(grunt) {
         sampler += '<div class="all-25 p'+size+'">\n';
         sampler += '<p>'+ size +'px<p>\n';
         chars.forEach(function(glyph){
-            sampler += '<span class="ii ii-'+glyph+'"></span>\n'
+            sampler += '<span class="ii ii-'+glyph+'"></span>\n';
         });
         sampler += '</div>\n';
     });
@@ -55,6 +57,8 @@ module.exports = function(grunt) {
     sampler += grunt.file.read('doc-end.html');
 
     grunt.file.write(options.dest, sampler);
+
+    grunt.log.writeln('File ' + chalk.cyan(options.dest) + ' created.');
 
 
     // // Iterate over all specified file groups.
