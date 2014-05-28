@@ -46,7 +46,7 @@ module.exports = function(grunt) {
     sampler += grunt.file.read('doc-body.html');
 
     options.sizes.forEach(function(size){
-        sampler += '<div class="all-25 p'+size+'">\n';
+        sampler += '<div class="all-100 p'+size+'">\n';
         sampler += '<p>'+ size +'px<p>\n';
         chars.forEach(function(glyph){
             sampler += '<span class="ii ii-'+glyph+'"></span>\n';
