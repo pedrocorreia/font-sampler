@@ -26,7 +26,7 @@ module.exports = function(grunt) {
     var json = grunt.file.readJSON(options.charmap);
     var chars = json.chars;
 
-    var sampler = grunt.file.read('templates/doc-head.html');
+    var sampler = grunt.file.read('doc-head.html');
 
     options.stylesheets.forEach(function(css){
         sampler += '<link rel="stylesheet" type="text/css" href="'+css+'">\n'
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
 
     sampler += '</style>\n';
 
-    sampler += grunt.file.read('templates/doc-body.html');
+    sampler += grunt.file.read('doc-body.html');
 
     options.sizes.forEach(function(size){
         sampler += '<div class="all-25 p'+size+'">\n';
@@ -52,7 +52,7 @@ module.exports = function(grunt) {
         sampler += '</div>\n';
     });
 
-    sampler += grunt.file.read('templates/doc-end.html');
+    sampler += grunt.file.read('doc-end.html');
 
     grunt.file.write(options.dest, sampler);
 
