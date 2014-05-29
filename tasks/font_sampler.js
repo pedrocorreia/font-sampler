@@ -22,71 +22,72 @@ module.exports = function(grunt) {
       charmap: 'glyphs.json',
       dest: 'dist/sample.html',
       sizes: [16,18,20,22,24,26,28,30,32,34,36,38,40],
-      stylesheets: ["http://cdn.ink.sapo.pt/3.0.2/css/ink.min.css","/css/ink-icons.css"],
-      colWidth: 100
+      stylesheets: ["http://cdn.ink.sapo.pt/3.0.2/css/ink.min.css","css/ink-icons.css"],
+      col_width: 100,
+      sample_template: '<div class="all-{% width %} p{% size %}">\n<p>{% size %}px</p>{% glyph %}</div>\n',
+      glyph_template: '<span class="ii ii-{% glyph %}"></span>\n'
     });
 
+    var css = "\n";
+    var samples_markup = "<h1>"+ options.fontname +"</h1>\n";
+    var sampler = "\n";
+
+    // load the glyphs json map
     var json = grunt.file.readJSON(options.charmap);
-    var chars = json.chars;
+    var glyphs = json.glyphs;
 
-    var sampler = grunt.file.read('doc-head.html');
+    // load the template file
+    var template = grunt.file.read('template.html');
 
-    options.stylesheets.forEach(function(css){
-        sampler += '<link rel="stylesheet" type="text/css" href="'+css+'">\n';
+    var sample_tag = /\{%[ ]*sample[ ]*%\}/ig;
+    var stylesheets_tag = /\{%[ ]*stylesheets[ ]*%\}/ig;
+    var width_tag = /\{%[ ]*width[ ]*%\}/ig;
+    var size_tag = /\{%[ ]*size[ ]*%\}/ig;
+    var glyph_tag = /\{%[ ]*glyph[ ]*%\}/ig;
+
+    // build the css string
+    options.stylesheets.forEach(function(file){
+        css += '<link rel="stylesheet" type="text/css" href="' + file + '">\n';
+        // css += file ;
     });
 
+    // console.log(css);
     // create sizes css
-    sampler += '<style>\n';
+    css += '<style>\n';
 
     options.sizes.forEach(function(size){
-        sampler += '.p'+size+' { font-size: '+size+'px !important; } \n';
+        css += '.p'+size+' { font-size: '+size+'px !important; } \n';
     });
 
-    sampler += '</style>\n';
+    css += '</style>\n';
 
-    sampler += grunt.file.read('doc-body.html');
+    // console.log(template.match(stylesheets_tag));
+
+    sampler = template.replace(stylesheets_tag,css);
+
 
     options.sizes.forEach(function(size){
-        sampler += '<div class="all-'+options.colWidth+' p'+size+'">\n';
-        sampler += '<p>'+ size +'px<p>\n';
-        chars.forEach(function(glyph){
-            sampler += '<span class="ii ii-'+glyph+'"></span>\n';
+
+        grunt.log.writeln('Creating sample for ' + chalk.cyan(size + 'px') + '.');
+
+        samples_markup += options.sample_template.replace(size_tag,size);
+        samples_markup = samples_markup.replace(width_tag,options.col_width);
+
+        var glyph_markup = "\n";
+
+        glyphs.forEach(function(glyph){
+            glyph_markup += options.glyph_template.replace(glyph_tag,glyph);
         });
-        sampler += '</div>\n';
+
+        samples_markup = samples_markup.replace(glyph_tag,glyph_markup);
     });
 
-    sampler += grunt.file.read('doc-end.html');
+    sampler = sampler.replace(sample_tag,samples_markup);
 
     grunt.file.write(options.dest, sampler);
 
-    grunt.log.writeln('File ' + chalk.cyan(options.dest) + ' created.');
+    grunt.log.writeln('File ' + chalk.green(options.dest) + ' created.');
 
-
-    // // Iterate over all specified file groups.
-    // this.files.forEach(function(f) {
-    //   // Concat specified files.
-    //   var src = f.src.filter(function(filepath) {
-    //     // Warn on and remove invalid source files (if nonull was set).
-    //     if (!grunt.file.exists(filepath)) {
-    //       grunt.log.warn('Source file "' + filepath + '" not found.');
-    //       return false;
-    //     } else {
-    //       return true;
-    //     }
-    //   }).map(function(filepath) {
-    //     // Read file source.
-    //     return grunt.file.read(filepath);
-    //   }).join(grunt.util.normalizelf(options.separator));
-    //
-    //   // Handle options.
-    //   src += options.punctuation;
-    //
-    //   // Write the destination file.
-    //   grunt.file.write(f.dest, src);
-    //
-    //   // Print a success message.
-    //   grunt.log.writeln('File "' + f.dest + '" created.');
-    // });
   });
 
 };

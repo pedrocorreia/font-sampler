@@ -1,6 +1,6 @@
 # grunt-font-sampler
 
-> The best Grunt plugin ever.
+> Generates an html document with icon font character samples at specified pixel sizes for easy visualization.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.2`
@@ -33,51 +33,84 @@ grunt.initConfig({
     },
   },
 });
+
 ```
+
+fontname: 'Ink-Icons',
+charmap: 'glyphs.json',
+dest: 'dist/sample.html',
+sizes: [16,18,20,22,24,26,28,30,32,34,36,38,40],
+stylesheets: ["http://cdn.ink.sapo.pt/3.0.2/css/ink.min.css","css/ink-icons.css"],
+col_width: 100,
+sample_template: '<div class="all-{% width %} p{% size %}">\n<p>{% size %}px</p>{% glyph %}</div>\n',
+glyph_template: '<span class="ii ii-{% glyph %}"></span>\n'
+
 
 ### Options
 
-#### options.separator
+#### options.fontname
 Type: `String`
-Default value: `',  '`
+Default value: `'My Font'`
 
-A string value that is used to do something with whatever.
+The font sample name.
 
-#### options.punctuation
+#### options.charmap
+Type: `Json File`
+Default value: `'glyphs.json'`
+
+Json file containing the glyphs array of css classes that match the required characters to be sampled. See glyphs.json file for more detail.
+
+#### options.dest
 Type: `String`
-Default value: `'.'`
+Default value: `'dist/sample.html'`
 
-A string value that is used to do something else with whatever else.
+The sample file name.
+
+#### options.sizes
+Type: `Array`
+Default value: `[16,18,20,22,24,26,28,30,32,34,36,38,40]`
+
+An array of pixel font sizes to be sampled.
+
+#### options.stylesheets
+Type: `Array`
+Default value: `["http://cdn.ink.sapo.pt/3.0.2/css/ink.min.css"]`
+
+Stylesheets to be link on the sample file.
+
+#### options.col_width
+Type: `Integer`
+Default value: `100`
+
+The sample layout column with. Eg. 50 will produce a two column layout.
+
+#### options.sample_template
+Type: `String`
+Default value: `'<div class="all-{% width %} p{% size %}">\n<p>{% size %}px</p>{% glyph %}</div>\n'`
+
+HTML snippet that will will contain the samples for each size. Must have the {% width %}, {% size %} and {% glyph %} tags.
+
+#### options.glyph_templace
+Type: `String`
+Default value: `'<span class="ii ii-{% glyph %}"></span>\n'`
+
+HTML snippet that will will contain the sampled character. Must have the {% glyph %} tag.
 
 ### Usage Examples
 
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
-
 ```js
 grunt.initConfig({
   font_sampler: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
-```
-
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
-
-```js
-grunt.initConfig({
-  font_sampler: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+    my_sample: {
+        fontname: 'My Icon Font',
+        charmap: 'glyphs.json',
+        dest: 'dist/sample.html',
+        sizes: [16,18,20,22,24,26,28,30,32,34,36,38,40],
+        stylesheets: ["http://cdn.ink.sapo.pt/3.0.2/css/ink.min.css","css/my-icon-font.css"],
+        col_width: 100,
+        sample_template: '<div class="all-{% width %} p{% size %}">\n<p>{% size %}px</p>{% glyph %}</div>\n',
+        glyph_template: '<span class="ii ii-{% glyph %}"></span>\n'
+    }
   },
 });
 ```

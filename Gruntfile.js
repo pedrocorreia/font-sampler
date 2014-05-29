@@ -30,7 +30,15 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     font_sampler: {
-      default_options: {
+      my_sample: {
+          fontname: 'Ink-Icons',
+          charmap: 'glyphs.json',
+          dest: 'dist/sample.html',
+          sizes: [16,18,20,22,24,26,28,30,32,34,36,38,40],
+          stylesheets: ["http://cdn.ink.sapo.pt/3.0.2/css/ink.min.css","css/ink-icons.css"],
+          col_width: 100,
+          sample_template: '<div class="all-{% width %} p{% size %}">\n<p>{% size %}px</p>{% glyph %}</div>\n',
+          glyph_template: '<span class="ii ii-{% glyph %}"></span>\n'
       }
     },
 
