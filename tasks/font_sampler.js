@@ -13,11 +13,9 @@ var parser = require('xml2js');
 
 module.exports = function(grunt) {
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
-
   grunt.registerMultiTask('font_sampler', 'The best Grunt plugin ever.', function() {
-    // Merge task-specific and/or target-specific options with these defaults.
+
+
     var options = this.options({
       fontname: 'Ink-Icons',
       charmap: 'chars',
@@ -27,7 +25,8 @@ module.exports = function(grunt) {
       stylesheets: ["http://cdn.ink.sapo.pt/3.0.2/css/ink.min.css","css/ink-icons.css"],
       col_width: 100,
       sample_template: '<div class="all-{% width %} p{% size %}">\n<p>{% size %}px</p>{% glyph %}</div>\n',
-      glyph_template: '<span class="ii ii-{% glyph %}"></span>\n'
+      glyph_template: '<span class="ii ii-{% glyph %}"></span>\n',
+      page_template: 'template/template.html'
     });
 
     var xml_chars = grunt.file.read(options.charmap);
@@ -61,7 +60,7 @@ module.exports = function(grunt) {
     var sampler = "\n";
 
     // load the template file
-    var template = grunt.file.read('template.html');
+    var template = grunt.file.read(options.page_template);
 
     var sample_tag = /\{%[ ]*sample[ ]*%\}/ig;
     var stylesheets_tag = /\{%[ ]*stylesheets[ ]*%\}/ig;
@@ -72,10 +71,8 @@ module.exports = function(grunt) {
     // build the css string
     options.stylesheets.forEach(function(file){
         css += '<link rel="stylesheet" type="text/css" href="' + file + '">\n';
-        // css += file ;
     });
 
-    // console.log(css);
     // create sizes css
     css += '<style>\n';
 
