@@ -9,6 +9,7 @@
 'use strict';
 
 var chalk = require('chalk');
+var parser = require('xml2js');
 
 module.exports = function(grunt) {
 
@@ -19,8 +20,9 @@ module.exports = function(grunt) {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       fontname: 'Ink-Icons',
-      charmap: 'glyphs.json',
+      charmap: 'chars',
       dest: 'dist/sample.html',
+      sass: 'src/sass/_glyphs.scss',
       sizes: [16,18,20,22,24,26,28,30,32,34,36,38,40],
       stylesheets: ["http://cdn.ink.sapo.pt/3.0.2/css/ink.min.css","css/ink-icons.css"],
       col_width: 100,
@@ -28,13 +30,37 @@ module.exports = function(grunt) {
       glyph_template: '<span class="ii ii-{% glyph %}"></span>\n'
     });
 
+    var xml_chars = grunt.file.read(options.charmap);
+    var json_chars, scss, unicode, name;
+    var glyphs = [];
+
+    parser.parseString(xml_chars, function (err, result) {
+        json_chars = result;
+    });
+
+    scss = "$ii-icons: (\n";
+
+    json_chars.ZapfTable.glyphInfo.forEach(function(glyph, index){
+
+        unicode = glyph.unicodeList[0].unicode[0].$.value;
+        name = glyph.fontGlyph[0].$.glyphName.replace(/\./g,"-");
+
+        if( unicode.match(/\+E([a-z0-9])/g) !== null )
+        {
+            scss += "\t('"+name+"','"+unicode.replace("U\+",'\\').toLowerCase()+"'),\n";
+            glyphs.push(name);
+        }
+
+    });
+
+    console.log(glyphs);
+
+    scss += ");\n";
+    // console.log(scss);
+
     var css = "\n";
     var samples_markup = "<h1>"+ options.fontname +"</h1>\n";
     var sampler = "\n";
-
-    // load the glyphs json map
-    var json = grunt.file.readJSON(options.charmap);
-    var glyphs = json.glyphs;
 
     // load the template file
     var template = grunt.file.read('template.html');
@@ -61,7 +87,7 @@ module.exports = function(grunt) {
 
     css += '</style>\n';
 
-    // console.log(template.match(stylesheets_tag));
+    // // console.log(template.match(stylesheets_tag));
 
     sampler = template.replace(stylesheets_tag,css);
 
@@ -85,7 +111,9 @@ module.exports = function(grunt) {
     sampler = sampler.replace(sample_tag,samples_markup);
 
     grunt.file.write(options.dest, sampler);
+    grunt.file.write(options.sass, scss);
 
+    grunt.log.writeln('File ' + chalk.green(options.sass) + ' created with '+ chalk.green(json_chars.ZapfTable.glyphInfo.length) +' characters.');
     grunt.log.writeln('File ' + chalk.green(options.dest) + ' created.');
 
   });
