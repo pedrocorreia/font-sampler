@@ -53,8 +53,6 @@ module.exports = function(grunt) {
 
     });
 
-    console.log(glyphs);
-
     scss += ");\n";
     // console.log(scss);
 
