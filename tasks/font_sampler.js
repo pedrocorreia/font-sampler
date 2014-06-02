@@ -15,6 +15,7 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('font_sampler', 'The best Grunt plugin ever.', function() {
 
+    var done = this.async();
 
     var options = this.options({
       fontname: 'Ink-Icons',
@@ -110,6 +111,8 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('File ' + chalk.green(options.sass) + ' created with '+ chalk.green(json_chars.ZapfTable.glyphInfo.length) +' characters.');
     grunt.log.writeln('File ' + chalk.green(options.dest) + ' created.');
+
+    done();
 
   });
 
