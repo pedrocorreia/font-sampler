@@ -27,7 +27,10 @@ module.exports = function(grunt) {
       col_width: 100,
       sample_template: '<div class="all-{% width %} p{% size %}">\n<p>{% size %}px</p>{% glyph %}</div>\n',
       glyph_template: '<span class="ii ii-{% glyph %}"></span>\n',
-      page_template: 'template/template.html'
+      page_template: 'template/template.html',
+      glyph_name_prefix: 'ink.',
+      glyph_name_separator: '.',
+      remove_glyph_name_prefix: true
     });
 
     var xml_chars = grunt.file.read(options.charmap);
@@ -42,13 +45,18 @@ module.exports = function(grunt) {
 
     json_chars.ZapfTable.glyphInfo.forEach(function(glyph, index){
 
-        unicode = glyph.unicodeList[0].unicode[0].$.value;
-        name = glyph.fontGlyph[0].$.glyphName.replace(/\./g,"-");
+        if ( glyph.unicodeList !== undefined ) {
 
-        if( unicode.match(/\+E([a-z0-9])/g) !== null )
-        {
-            scss += "\t('"+name+"','"+unicode.replace("U\+",'\\').toLowerCase()+"'),\n";
-            glyphs.push(name);
+            unicode = glyph.unicodeList[0].unicode[0].$.value;
+            name = glyph.fontGlyph[0].$.glyphName.replace(/\./g,"-");
+            name = name.replace(/ink-/g,'');
+
+
+            if( unicode.match(/\+E([a-z0-9])/g) !== null )
+            {
+                scss += "\t('"+name+"','"+unicode.replace("U\+",'\\').toLowerCase()+"'),\n";
+                glyphs.push(name);
+            }
         }
 
     });
