@@ -30,7 +30,8 @@ module.exports = function(grunt) {
       page_template: 'template/template.html',
       glyph_name_prefix: 'ink.',
       glyph_name_separator: '.',
-      remove_glyph_name_prefix: true
+      remove_glyph_name_prefix: true,
+      sass_header: '$sf-icons: (\n'
     });
 
     var xml_chars = grunt.file.read(options.charmap);
@@ -41,7 +42,7 @@ module.exports = function(grunt) {
         json_chars = result;
     });
 
-    scss = "$ii-icons: (\n";
+    scss = options.sass_header;
 
     json_chars.ZapfTable.glyphInfo.forEach(function(glyph, index){
 
