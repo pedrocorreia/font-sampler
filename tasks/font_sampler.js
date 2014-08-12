@@ -66,7 +66,7 @@ module.exports = function(grunt) {
     // console.log(scss);
 
     var css = "\n";
-    var samples_markup = "<h1>"+ options.fontname +"</h1>\n";
+    var samples_markup = '<div class="all-100"><h1>'+ options.fontname +'</h1></div>\n';
     var sampler = "\n";
 
     // load the template file
@@ -107,10 +107,11 @@ module.exports = function(grunt) {
         var glyph_markup = "\n";
 
         glyphs.forEach(function(glyph){
-            glyph_markup += options.glyph_template.replace(glyph_tag,glyph);
+          glyph_markup += options.glyph_template.replace(glyph_tag,glyph);
         });
 
         samples_markup = samples_markup.replace(glyph_tag,glyph_markup);
+        samples_markup = samples_markup.replace(size_tag,size);
     });
 
     sampler = sampler.replace(sample_tag,samples_markup);
@@ -118,7 +119,7 @@ module.exports = function(grunt) {
     grunt.file.write(options.dest, sampler);
     grunt.file.write(options.sass, scss);
 
-    grunt.log.writeln('File ' + chalk.green(options.sass) + ' created with '+ chalk.green(json_chars.ZapfTable.glyphInfo.length) +' characters.');
+    grunt.log.writeln('File ' + chalk.green(options.sass) + ' created with '+ chalk.green(json_chars.ZapfTable.glyphInfo.length) +' icons.');
     grunt.log.writeln('File ' + chalk.green(options.dest) + ' created.');
 
     done();
