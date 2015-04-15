@@ -13,15 +13,14 @@ var parser = require('xml2js');
 
 module.exports = function(grunt) {
 
-  grunt.registerMultiTask('font_sampler', 'The best Grunt plugin ever.', function() {
+  grunt.registerMultiTask('font_sampler', 'Generates a html font sampler from a Zapf Table produced with ftxanalyzer.', function() {
 
     var done = this.async();
 
     var options = this.options({
-      fontname: 'Ink-Icons',
+      fontname: 'Symbol',
       charmap: 'chars',
       dest: 'dist/sample.html',
-      sass: 'src/sass/_glyphs.scss',
       sizes: [16,18,20,22,24,26,28,30,32,34,36,38,40],
       stylesheets: ["http://cdn.ink.sapo.pt/3.0.2/css/ink.min.css","css/ink-icons.css"],
       col_width: 100,
@@ -42,7 +41,7 @@ module.exports = function(grunt) {
         json_chars = result;
     });
 
-    scss = options.sass_header;
+    // scss = options.sass_header;
 
     json_chars.ZapfTable.glyphInfo.forEach(function(glyph, index){
 
@@ -62,7 +61,7 @@ module.exports = function(grunt) {
 
     });
 
-    scss += ");\n";
+    // scss += ");\n";
     // console.log(scss);
 
     var css = "\n";
@@ -83,7 +82,7 @@ module.exports = function(grunt) {
         css += '<link rel="stylesheet" type="text/css" href="' + file + '">\n';
     });
 
-    // create sizes css
+    // create sample font sizes css
     css += '<style>\n';
 
     options.sizes.forEach(function(size){
@@ -117,9 +116,7 @@ module.exports = function(grunt) {
     sampler = sampler.replace(sample_tag,samples_markup);
 
     grunt.file.write(options.dest, sampler);
-    grunt.file.write(options.sass, scss);
 
-    grunt.log.writeln('File ' + chalk.green(options.sass) + ' created with '+ chalk.green(json_chars.ZapfTable.glyphInfo.length) +' icons.');
     grunt.log.writeln('File ' + chalk.green(options.dest) + ' created.');
 
     done();
